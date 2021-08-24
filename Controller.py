@@ -5,9 +5,8 @@ from Board import Board
 
 class Controller:
     def __init__(self):
-        self.players = [Player(1), Player(2)]
-        self.board = Board(self.players)
+        self.board = Board()
         print(repr(self.board))
-        pass
+
 
 controller = Controller()

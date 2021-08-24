@@ -1,12 +1,14 @@
 
 class Piece:
-    def __init__(self, type, team, x, y):
+    def __init__(self, type, team, char, num):
         self.type = type
         self.team = team
-        self.x = x
-        self.y = y
+        self.char = char
+        self.num = num
+        self.colour = "White" if team else "Black"
         pass
 
     def __repr__(self):
-        str = self.type + ' ' + repr(self.x) + ' ' + repr(self.y)
+        str = self.colour + ' '
+        str += self.type + ' ' + repr(self.char) + ' ' + repr(self.num) + '\n'
         return str
