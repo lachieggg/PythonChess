@@ -12,7 +12,7 @@ class Controller:
         self.window = Window()
         self.window.main()
         self.pieceFactory = PieceFactory()
-        print(repr(self.board))
-
+        self.pieceFactory.create_pieces_init()
+        print(repr(self.pieceFactory))
 
 controller = Controller()
