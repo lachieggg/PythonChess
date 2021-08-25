@@ -1,8 +1,9 @@
 
 from Player import Player
-from Piece import Piece
 from Board import Board
 from Window import Window
+
+from pieces import Piece
 
 class Controller:
     def __init__(self):

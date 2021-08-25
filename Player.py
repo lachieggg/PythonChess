@@ -1,4 +1,4 @@
-from Piece import Piece
+from pieces import Piece
 
 class Player:
     def __init__(self, team):
