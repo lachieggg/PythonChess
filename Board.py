@@ -30,7 +30,7 @@ class Board:
 
 
     def setup_players(self, algorithms=None):
-        self.players = [Player(0), Player(1)]
+        self.players = [Player('B'), Player('W')]
 
     def setup_pieces(self):
         self.pieces = []
