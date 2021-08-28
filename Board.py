@@ -10,7 +10,7 @@ class Board:
         # setup board
         self.setup_players()
         self.setup_squares()
-        print(self
+        print(self)
 
     def __str__(self):
         players = '\nPlayers: \n' + ''.join([str(player) for player in self.players])
