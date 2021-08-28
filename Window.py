@@ -14,13 +14,14 @@ from pygame.locals import (
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 800
+BOARD_IMG_PATH = '/assets/board/board.png'
 
 class Window:
     def __init__(self):
         pygame.init()
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.screen.fill((0, 0, 0))
-        self.board_img = pygame.image.load_extended(os.getcwd() + '/assets/board.png')
+        self.board_img = pygame.image.load_extended(os.getcwd() + BOARD_IMG_PATH)
 
     def main(self):
         running = True

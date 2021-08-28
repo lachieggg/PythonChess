@@ -13,6 +13,5 @@ class Controller:
         self.window.main()
         self.pieceFactory = PieceFactory()
         self.pieceFactory.create_pieces_init()
-        print(repr(self.pieceFactory))
 
 controller = Controller()

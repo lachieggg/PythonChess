@@ -12,10 +12,10 @@ class PieceFactory:
         self.verticals =    [1, 2, 3, 4, 5, 6, 7, 8]
         self.pieces =       []
 
-    def __repr__(self):
+    def __str__(self):
         str = ''
         for piece in self.pieces:
-            str += repr(piece)
+            str += str(piece)
         return str
 
     def create_piece(self, colour, type, char, num):

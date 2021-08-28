@@ -5,5 +5,5 @@ class Player:
         self.team = team
         self.colour = "White" if team == 'W' else "Black"
 
-    def __repr__(self):
+    def __str__(self):
         return "Player " + str(self.colour) + "\n"

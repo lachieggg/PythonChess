@@ -6,6 +6,3 @@ class Piece:
         self.num = num          # vertical position
         self.colour = colour    # 'W' or 'B'
         self.filename = filename
-
-    def __repr__(self):
-        return str(self.__dict__())
