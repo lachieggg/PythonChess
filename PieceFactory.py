@@ -1,7 +1,7 @@
 from pieces.Piece import Piece
 from pieces.King import King
 from pieces.Queen import Queen
-from pieces.Castle import Castle
+from pieces.Rook import Rook
 from pieces.Bishop import Bishop
 from pieces.Knight import Knight
 from pieces.Pawn import Pawn
@@ -18,7 +18,7 @@ class PieceFactory:
             str += str(piece)
         return str
 
-    def create_piece(self, colour, type, char, num):
+    def create_piece(self, type, colour, char, num):
         if(type == 'K'):
             piece = King(type, colour, char, num)
         elif(type == 'Q'):
@@ -27,14 +27,14 @@ class PieceFactory:
             piece = Bishop(type, colour, char, num)
         elif(type == 'H'):
             piece = Knight(type, colour, char, num)
-        elif(type == 'C'):
-            piece = Castle(type, colour, char, num)
+        elif(type == 'R'):
+            piece = Rook(type, colour, char, num)
         elif(type == 'P'):
             piece = Pawn(type, colour, char, num)
         else:
-            piece = None
+            return
 
-        if piece: self.pieces.append(piece)
+        self.pieces.append(piece)
 
     def create_pieces(self, pieces_data):
         for piece_data in pieces_data:
