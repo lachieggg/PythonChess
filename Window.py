@@ -9,7 +9,9 @@ from pygame.locals import (
     K_RIGHT,
     K_ESCAPE,
     KEYDOWN,
-    QUIT
+    QUIT,
+    MOUSEBUTTONDOWN,
+    MOUSEBUTTONUP
 )
 
 import Board
@@ -28,9 +30,9 @@ class Window:
         self.screen.blit(self.board_img, (0, 0))
 
     def render_piece(self, piece):
-        mapping = self.board.mapping
+        render_mapping = self.board.render_mapping
         board_position = piece.get_position()   # Position eg. 'H5' or 'A3'
-        (x, y) = mapping.get(board_position) # Position eg. (700, 400)
+        (x, y) = render_mapping.get(board_position)    # Position eg. (700, 400)
         print("x, y = " + str(x) + ' ' +  str(y))
         print(piece.filename)
         icon = pygame.image.load_extended(piece.filename)
@@ -50,8 +52,17 @@ class Window:
                     if event.key == K_ESCAPE:
                         running = False
 
+
                 elif event.type == QUIT:
                     running = False
+
+
+                if event.type == MOUSEBUTTONDOWN:
+                    # clicking on a piece
+                    x, y = pygame.mouse.get_pos()
+                    sq = self.board.get_square_from_mouse_position(x, y, SCREEN_WIDTH, SCREEN_HEIGHT)
+                    print(sq)
+
 
 
             pygame.display.flip()

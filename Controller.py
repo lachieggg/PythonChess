@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 
 from Player import Player
 from Board import Board
@@ -18,6 +19,7 @@ class Controller:
         # ..
 
 
+
     def render_pieces(self):
         pieces = self.pieceFactory.pieces
         for piece in pieces:
@@ -25,10 +27,17 @@ class Controller:
         self.window.render_pieces(pieces)
 
     def setup_players(self, algorithms=None):
-        self.players = [Player('B'), Player('W')]
+        self.players = {'B': Player('B'), 'W': Player('W')}
 
     def play(self):
-        pass
+        return
+        playing = True
+        player = self.players.get('W')
+        while playing:
+            while not player.moved:
+                sleep(1)
+
+
 
     def setup_squares(self):
         self.squares = {}
