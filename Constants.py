@@ -4,11 +4,11 @@ import os
 BOARD_WIDTH = BOARD_HEIGHT = 8
 
 ### Indexes
-NUM_START = 0
+NUM_START = 1
 CHAR_START = 65
 
 ### Board
-NUMS =  [n+1    for n in range(NUM_START,  NUM_START+BOARD_HEIGHT)]
+NUMS =  [n      for n in range(NUM_START,  NUM_START+BOARD_HEIGHT)]
 CHARS = [chr(c) for c in range(CHAR_START, CHAR_START+BOARD_WIDTH)]
 
 ### Widths
