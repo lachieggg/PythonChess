@@ -17,13 +17,12 @@ class Window:
         """Render a piece in the window"""
         pos = piece.get_position() # Position eg. 'H5' or 'A3'
         [x, y] = board.get_pixels_from_square(*pos)
-        print(piece.filename)
         icon = pygame.image.load_extended(piece.filename)
         self.screen.blit(icon, (x+PIECE_WIDTH, y+SQUARE_WIDTH/2-PIECE_WIDTH))
 
     def render_pieces(self, board):
         """Render all the pieces on the board"""
-        for piece in list(board.get_pieces().values()):
+        for piece in list(board.pieces.values()):
             self.render_piece(board, piece)
 
     def get_square_rgb(self, board, char, num):
@@ -45,7 +44,7 @@ class Window:
             self.screen,
             square_rgb,
             (*pixel_coords, sq_width, sq_width),
-            1
+            HIGHLIGHTING_WIDTH
         )
 
     def highlight_sq(self, board, char, num):
@@ -57,7 +56,7 @@ class Window:
             self.screen,
             RED_RGB,
             (x, y, SQUARE_WIDTH, SQUARE_WIDTH),
-            1
+            HIGHLIGHTING_WIDTH
         )
 
     def get_screen_dimensions(self):

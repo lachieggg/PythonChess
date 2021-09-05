@@ -14,14 +14,8 @@ class Board:
         self.map()
         self.squares = {}
 
-    def get_pieces(self):
-        """Get the pieces dictionary associated with the board"""
-        return self.pieces
-
     def map(self):
         """Map board squares to screen pixels for rendering and selecting squares"""
-
-        # Map for making moves
         self.square_to_pixel_mapping = {}
 
         x = BORDER_WIDTH - SQUARE_WIDTH

@@ -5,6 +5,7 @@ from Constants import *
 
 class Piece:
     def __init__(self, type, colour, char, num):
+        """Initializer for the Piece class"""
         self.type = type        # eg. K for King, Q for Queen
         self.char = char        # horizontal position
         self.num = num          # vertical position
@@ -18,16 +19,8 @@ class Piece:
         return ASSETS_IMG_PATH + self.get_colour_name() + self.get_type_name() + '.png'
 
     def get_type_name(self):
-        mapping = {
-            KING:   'King',
-            QUEEN:  'Queen',
-            ROOK:   'Rook',
-            BISHOP: 'Bishop',
-            HORSE:  'Horse',
-            PAWN:   'Pawn'
-        }
-        if self.type in mapping.keys():
-            return mapping[self.type]
+        if self.type in PIECE_MAPPING.keys():
+            return PIECE_MAPPING[self.type]
 
     def get_colour_name(self):
         return WHITE if self.colour == 'W' else BLACK

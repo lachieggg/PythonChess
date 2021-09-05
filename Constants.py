@@ -1,13 +1,20 @@
 import os
 
-### Positions
-CHARS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
-NUMS =  [1, 2, 3, 4, 5, 6, 7, 8]
+### Size
+BOARD_WIDTH = BOARD_HEIGHT = 8
+
+### Indexes
+NUM_START = 0
+CHAR_START = 64
+
+### Board
+NUMS =  [int(n+1) for n in range(NUM_START,  NUM_START+BOARD_HEIGHT)]
+CHARS = [chr(c+1) for c in range(CHAR_START, CHAR_START+BOARD_WIDTH)]
 
 ### Widths
+PIECE_WIDTH = 20
 SQUARE_WIDTH = 75
 BORDER_WIDTH = 50
-PIECE_WIDTH = 20
 
 ### Images
 BOARD_IMG_PATH = os.getcwd() + '/' + 'assets/' + 'board/' + 'board.png'
@@ -19,17 +26,29 @@ SCREEN_HEIGHT = 700
 SCREEN_DIMENSIONS = (SCREEN_WIDTH, SCREEN_HEIGHT)
 
 ### Colours
-RED_RGB   = (255, 0, 0)
 CREAM_RGB = (248, 248, 151)
 BROWN_RGB = (107, 73, 4)
+RED_RGB   = (255, 0, 0)
+
+### Highlighting
+HIGHLIGHTING_WIDTH = 1
 
 ### Pieces
-KING =   'K'
-QUEEN =  'Q'
-ROOK =   'R'
-HORSE =  'H'
 BISHOP = 'B'
+QUEEN =  'Q'
+HORSE =  'H'
+KING =   'K'
+ROOK =   'R'
 PAWN =   'P'
+
+PIECE_MAPPING = {
+    KING:   'King',
+    QUEEN:  'Queen',
+    ROOK:   'Rook',
+    BISHOP: 'Bishop',
+    HORSE:  'Horse',
+    PAWN:   'Pawn'
+}
 
 ### Teams
 WHITE = 'White'

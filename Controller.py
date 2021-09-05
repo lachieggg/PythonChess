@@ -76,12 +76,10 @@ class Controller:
             self.window.remove_prev_highlight(self.board, self.selected_sq)
             if (self.selected_sq.get('char') == char and self.selected_sq.get('num') == num):
                 # User selected an already selected square
-                print("Deselecting square: " + char + str(num))
                 self.selected_sq = False
                 return
-            #if self.board.
+            #if self.board.pieces
 
-        print("Selecting square: " + char + str(num))
         self.selected_sq = {'char': char, 'num': num}
         self.window.highlight_sq(self.board, char, num)
 
