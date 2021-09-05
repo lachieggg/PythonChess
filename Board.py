@@ -1,24 +1,39 @@
+import os
 
 from Player import Player
 from pieces import Piece
 
-
 ### Constants
 #   Positions
 CHARS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
-NUMS = [1, 2, 3, 4, 5, 6, 7, 8]
+NUMS =  [1, 2, 3, 4, 5, 6, 7, 8]
 #   Widths
-SQUARE_WIDTH = 75           # Width of each square
-BORDER_WIDTH = 35           # Border widith for the purposes of rendering
-BORDER_WIDTH_REAL = 50      # Real border width
+SQUARE_WIDTH = 75
+BORDER_WIDTH = 50
+PIECE_WIDTH = 20
+# Image
+BOARD_IMG_PATH = os.getcwd() + '/assets/board/board.png'
 
 class Board:
-    def __init__(self):
+    def __init__(self, pieces):
         # setup board
         self.setup_players()
         self.setup_squares()
-        print(self)
+        self.pieces = pieces
         self.map()
+        self.board_img_path  = BOARD_IMG_PATH
+
+    def get_pieces(self):
+        return self.pieces
+
+    def get_piece_width(self):
+        return PIECE_WIDTH
+
+    def get_square_width(self):
+        return SQUARE_WIDTH
+
+    def get_border_width(self):
+        return BORDER_WIDTH
 
     def __str__(self):
         players = '\nPlayers: \n' + ''.join([str(player) for player in self.players])
@@ -27,62 +42,67 @@ class Board:
 
     def map(self):
         """
-        Map board squares to screen pixels for rendering and making moves
+        Map board squares to screen pixels for rendering and selecting squares
         """
-        self.render_mapping = {}
-        x = BORDER_WIDTH-SQUARE_WIDTH/2
-
-        # Map for rendering pieces
-        for char in CHARS:
-            y = BORDER_WIDTH-SQUARE_WIDTH/2
-            x += SQUARE_WIDTH
-            for num in NUMS:
-                y += SQUARE_WIDTH
-                key = char + str(num)
-                self.render_mapping[key] = [x,y]
-
 
         # Map for making moves
-        self.square_mapping = {}
+        self.square_to_pixel_mapping = {}
 
-        x = BORDER_WIDTH_REAL
+        x = BORDER_WIDTH - SQUARE_WIDTH
         for char in CHARS:
-            y = BORDER_WIDTH_REAL
+            y = BORDER_WIDTH - SQUARE_WIDTH
             x += SQUARE_WIDTH
-            for num in NUMS:
+            for num in NUMS[::-1]:
                 y += SQUARE_WIDTH
                 key = char + str(num)
-                self.square_mapping[key] = (x, y)
+                self.square_to_pixel_mapping[key] = (x, y)
 
 
         print('\n')
-        print(self.render_mapping)
+        print(self.square_to_pixel_mapping)
 
-    def get_square_from_mouse_position(self, x, y, screen_width, screen_height):
+    def get_square_from_pixels(self, x, y, screen_width, screen_height):
         """Returns the square id from mouse position"""
 
-        if x < BORDER_WIDTH_REAL or x > screen_width - BORDER_WIDTH_REAL:
-            return False
-        if y < BORDER_WIDTH_REAL or y > screen_height - BORDER_WIDTH_REAL:
+        num_index = int(float(y - BORDER_WIDTH)/SQUARE_WIDTH)
+        char_index = int(float(x - BORDER_WIDTH)/SQUARE_WIDTH)
+
+        if num_index >= len(NUMS) or char_index >= len(CHARS):
             return False
 
-        x = x - BORDER_WIDTH_REAL
-        y = screen_height - BORDER_WIDTH_REAL - y
-
-        num = NUMS[int(float(y)/SQUARE_WIDTH)]
-        char = CHARS[int(float(x)/SQUARE_WIDTH)]
+        num = NUMS[::-1][num_index]
+        char = CHARS[char_index]
 
         return char + str(num)
 
+    def get_pixels_from_square(self, char, num):
+        """Returns the mouse position from square char and number"""
+
+        if char not in CHARS or num not in NUMS:
+            return False
+
+        return self.square_to_pixel_mapping.get(char + str(num))
+
+    def get_square_colour(self, char, num):
+        """
+        Returns the square colour as a bool given the coordinates
+        Even results are black squares (eg. A1 or C3)
+        Odd results are white squares (eg. B1 or C2)
+        """
+        char_as_num = ord(char) - ord('A') + 1
+        if ((char_as_num + num) % 2) == 0:
+            return False
+        return True
+
     def get_square_pixel_limits(self, char, num):
         """Returns the pixel limits that constitute the mouse being over a square"""
-        x_min, y_min = self.square_mapping.get(char + str(num))
+        x_min, y_min = self.square_to_pixel_mapping.get(char + str(num))
         return [(x_min, x_min+SQUARE_WIDTH), (y_min, y_min+SQUARE_WIDTH)]
 
     def setup_squares(self):
         self.squares = {}
         for char in CHARS:
-            for num in NUMS:
+            for num in NUMS[::-1]:
                 key = char + str(num)
                 self.squares[key] = 'E' # empty
 

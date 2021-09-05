@@ -11,7 +11,7 @@ class Piece:
         self.filename = self.get_filename()
 
     def get_position(self):
-        return self.char + str(self.num)
+        return [self.char, self.num]
 
     def get_filename(self):
         return ASSETS_PATH + self.get_colour_name() + self.get_type_name() + '.png'

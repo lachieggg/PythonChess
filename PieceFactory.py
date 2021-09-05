@@ -10,7 +10,8 @@ class PieceFactory:
     def __init__(self):
         self.horizontals =  ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
         self.verticals =    [1, 2, 3, 4, 5, 6, 7, 8]
-        self.pieces =       []
+        self.pieces =       {}
+        self.create_pieces()
 
     def __str__(self):
         str = ''
@@ -34,13 +35,13 @@ class PieceFactory:
         else:
             return
 
-        self.pieces.append(piece)
+        key = char + str(num)
+        self.pieces[key] = piece
 
-    def create_pieces(self, pieces_data):
-        for piece_data in pieces_data:
-            self.create_piece(*piece_data)
+    def get_pieces(self):
+        return self.pieces
 
-    def create_pieces_init(self):
+    def create_pieces(self):
         initial_pieces_data = [
             ['K', 'W', 'E', 1],
             ['Q', 'W', 'D', 1],
@@ -75,4 +76,5 @@ class PieceFactory:
             ['P', 'B', 'G', 7],
             ['P', 'B', 'H', 7]
         ]
-        self.create_pieces(initial_pieces_data)
+        for piece_data in initial_pieces_data:
+            self.create_piece(*piece_data)
