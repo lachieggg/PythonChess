@@ -5,7 +5,7 @@ BOARD_WIDTH = BOARD_HEIGHT = 8
 
 ### Indexes
 NUM_START = 1
-CHAR_START = 65
+CHAR_START = ord('A')
 
 ### Board
 NUMS =  [n      for n in range(NUM_START,  NUM_START+BOARD_HEIGHT)]
