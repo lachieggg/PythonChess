@@ -5,11 +5,11 @@ BOARD_WIDTH = BOARD_HEIGHT = 8
 
 ### Indexes
 NUM_START = 0
-CHAR_START = 64
+CHAR_START = 65
 
 ### Board
-NUMS =  [int(n+1) for n in range(NUM_START,  NUM_START+BOARD_HEIGHT)]
-CHARS = [chr(c+1) for c in range(CHAR_START, CHAR_START+BOARD_WIDTH)]
+NUMS =  [n+1    for n in range(NUM_START,  NUM_START+BOARD_HEIGHT)]
+CHARS = [chr(c) for c in range(CHAR_START, CHAR_START+BOARD_WIDTH)]
 
 ### Widths
 PIECE_WIDTH = 20
