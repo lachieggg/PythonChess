@@ -1,49 +1,25 @@
 import os
 
 from Player import Player
-from pieces import Piece
-
-### Constants
-#   Positions
-CHARS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
-NUMS =  [1, 2, 3, 4, 5, 6, 7, 8]
-#   Widths
-SQUARE_WIDTH = 75
-BORDER_WIDTH = 50
-PIECE_WIDTH = 20
-# Image
-BOARD_IMG_PATH = os.getcwd() + '/assets/board/board.png'
+from pieces.Piece import Piece
+from Constants import *
 
 class Board:
     def __init__(self, pieces):
+        """Initializes the board object"""
         # setup board
         self.setup_players()
-        self.setup_squares()
         self.pieces = pieces
+        self.setup_squares()
         self.map()
-        self.board_img_path  = BOARD_IMG_PATH
+        self.squares = {}
 
     def get_pieces(self):
+        """Get the pieces dictionary associated with the board"""
         return self.pieces
 
-    def get_piece_width(self):
-        return PIECE_WIDTH
-
-    def get_square_width(self):
-        return SQUARE_WIDTH
-
-    def get_border_width(self):
-        return BORDER_WIDTH
-
-    def __str__(self):
-        players = '\nPlayers: \n' + ''.join([str(player) for player in self.players])
-        squares = '\nSquares: \n' + str(self.squares)
-        return players + squares
-
     def map(self):
-        """
-        Map board squares to screen pixels for rendering and selecting squares
-        """
+        """Map board squares to screen pixels for rendering and selecting squares"""
 
         # Map for making moves
         self.square_to_pixel_mapping = {}
@@ -84,11 +60,7 @@ class Board:
         return self.square_to_pixel_mapping.get(char + str(num))
 
     def get_square_colour(self, char, num):
-        """
-        Returns the square colour as a bool given the coordinates
-        Even results are black squares (eg. A1 or C3)
-        Odd results are white squares (eg. B1 or C2)
-        """
+        """Returns the square colour as a bool given the coordinates"""
         char_as_num = ord(char) - ord('A') + 1
         if ((char_as_num + num) % 2) == 0:
             return False
@@ -100,11 +72,18 @@ class Board:
         return [(x_min, x_min+SQUARE_WIDTH), (y_min, y_min+SQUARE_WIDTH)]
 
     def setup_squares(self):
+        """Sets up the initial squares on the board"""
         self.squares = {}
         for char in CHARS:
             for num in NUMS[::-1]:
                 key = char + str(num)
-                self.squares[key] = 'E' # empty
+                self.squares[key] = None # empty
+
+        for piece in self.pieces.values():
+            if not piece:
+                continue
+            self.squares[piece.char + str(piece.num)] = piece
 
     def setup_players(self, algorithms=None):
+        """Sets up the players on the board"""
         self.players = [Player('B'), Player('W')]

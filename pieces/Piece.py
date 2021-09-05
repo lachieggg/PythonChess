@@ -1,6 +1,7 @@
 import os
+import sys
 
-ASSETS_PATH = os.getcwd() + '/assets/'
+from Constants import *
 
 class Piece:
     def __init__(self, type, colour, char, num):
@@ -14,22 +15,22 @@ class Piece:
         return [self.char, self.num]
 
     def get_filename(self):
-        return ASSETS_PATH + self.get_colour_name() + self.get_type_name() + '.png'
+        return ASSETS_IMG_PATH + self.get_colour_name() + self.get_type_name() + '.png'
 
     def get_type_name(self):
         mapping = {
-        'K':'King',
-        'Q':'Queen',
-        'R':'Rook',
-        'B':'Bishop',
-        'H':'Horse',
-        'P':'Pawn'
+            KING:   'King',
+            QUEEN:  'Queen',
+            ROOK:   'Rook',
+            BISHOP: 'Bishop',
+            HORSE:  'Horse',
+            PAWN:   'Pawn'
         }
         if self.type in mapping.keys():
             return mapping[self.type]
 
     def get_colour_name(self):
-        return 'White' if self.colour == 'W' else 'Black'
+        return WHITE if self.colour == 'W' else BLACK
 
     def __str__(self):
         name = self.get_colour_name() + ' ' + self.get_type_name() + ' '
