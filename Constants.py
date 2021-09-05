@@ -42,11 +42,11 @@ ROOK =   'R'
 PAWN =   'P'
 
 PIECE_MAPPING = {
-    KING:   'King',
-    QUEEN:  'Queen',
-    ROOK:   'Rook',
     BISHOP: 'Bishop',
+    QUEEN:  'Queen',
     HORSE:  'Horse',
+    KING:   'King',
+    ROOK:   'Rook',
     PAWN:   'Pawn'
 }
 
