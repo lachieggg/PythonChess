@@ -5,24 +5,24 @@ import pygame
 import os
 
 from Player import Player
-from Board import Board
 from Window import Window
 from Game import Game
+from Board import Board
 
 from pieces.Piece import Piece
 from PieceFactory import PieceFactory
-
-from pygame.locals import (
-    K_ESCAPE,
-    KEYDOWN,
-    QUIT,
-    MOUSEBUTTONDOWN,
-    MOUSEBUTTONUP
-)
-
 class Controller:
     def __init__(self):
-        game = Game()
+        # Pieces
+        self.piece_factory = PieceFactory()
+        pieces = self.piece_factory.get_pieces()
+        # Board
+        board = Board(pieces)
+        # Window
+        window = Window()
+        window.render_pieces(board)
+        # Game
+        game = Game(window, pieces, board)
 
 def add_to_sys_path():
     """Add root folder to the path allowing imports from subdirectories"""

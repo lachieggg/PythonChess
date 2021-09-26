@@ -17,25 +17,43 @@ from pygame.locals import (
     MOUSEBUTTONUP
 )
 
+from Constants import *
+
 class Game:
-    def __init__(self):
+    def __init__(self, window, pieces, board):
         """Initializer for the Game"""
-        # Piece Factory
-        self.piece_factory = PieceFactory()
-        pieces = self.piece_factory.get_pieces()
-        # Board
-        self.board = Board(pieces)
         # Window
-        self.window = Window()
-        self.window.render_pieces(self.board)
+        self.window = window
+        # Pieces
+        self.pieces = pieces
+        # Board
+        self.board = board
         # Players
         self.setup_players()
+
+        self.square_selected = False
         # Main
-        self.selected_sq = False
         self.main()
 
+    def move_piece(self):
+        pass
+
+    def handle_mouse_click(self):
+        """Determines what to do when the user clicks the mouse"""
+        if(self.square_selected):
+            pass
+
+        x, y = pygame.mouse.get_pos()
+        dimensions = self.window.get_screen_dimensions()
+        sq = self.board.get_square_from_pixels(x, y, *dimensions)
+
+        if not sq:
+            return
+
+        self.select_square(sq[0], int(sq[1]))
+
     def main(self):
-        """Main PyGame loop"""
+        """Main PyGame loop - renders game and registers user input"""
         running = True
 
         while running:
@@ -48,36 +66,45 @@ class Game:
                     running = False
 
                 if event.type == MOUSEBUTTONDOWN:
-                    if(self.selected_sq):
-                        pass
-                    x, y = pygame.mouse.get_pos()
-                    sq = self.board.get_square_from_pixels(x, y, *self.window.get_screen_dimensions())
-                    if not sq:
-                        continue
+                    self.handle_mouse_click()
 
-                    self.select_square(sq[0], int(sq[1]))
-
+            self.window.render_pieces(self.board)
             pygame.display.flip()
 
         pygame.quit()
 
     def setup_players(self, algorithms=None):
         """Creates the initial player objects"""
-        self.players = {'B': Player('B'), 'W': Player('W')}
+        self.user = Player(WHITE)
+        self.computer = Player(BLACK)
+        self.players = {'user': self.user, 'computer': self.computer}
 
     def select_square(self, char, num):
         """Select a square"""
         if not char or not num:
             return
 
-        if self.selected_sq:
-            self.window.remove_prev_highlight(self.board, self.selected_sq)
-            if (self.selected_sq.get('char') == char and self.selected_sq.get('num') == num):
-                # User selected an already selected square
-                self.selected_sq = False
+        if self.square_selected:
+            self.window.remove_prev_highlight(self.board, self.square_selected)
+            if (self.square_selected.get('char') == char and self.square_selected.get('num') == num):
+                # User selected
+                # already selected square
+                self.square_selected = False
                 return
             else:
-                pass
+                # Old square selected
+                _char = self.square_selected.get('char')
+                _num = self.square_selected.get('num')
 
-        self.selected_sq = {'char': char, 'num': num}
+                piece = self.board.get_squares_piece(_char, _num)
+                if piece:
+                    print("moving piece")
+                    print(piece)
+                    print("Square of moving piece: " + _char + str(_num))
+                    print("Square moving piece to: " + char + str(num))
+                    # Move piece
+                    self.board.move_piece(piece, char, num, _char, _num)
+
+
+        self.square_selected = {'char': char, 'num': num}
         self.window.highlight_sq(self.board, char, num)

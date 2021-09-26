@@ -7,10 +7,3 @@ class Player:
 
     def __str__(self):
         return "Player " + str(self.colour) + "\n"
-
-    def move_piece(self, piece, position):
-        if not piece.colour == self.colour:
-            return
-
-        piece.char = position.get('char')
-        piece.num = position.get('num')

@@ -12,7 +12,6 @@ class Board:
         self.pieces = pieces
         self.setup_squares()
         self.map()
-        self.squares = {}
 
     def map(self):
         """Map board squares to screen pixels for rendering and selecting squares"""
@@ -29,7 +28,6 @@ class Board:
 
 
         print('\n')
-        print(self.square_to_pixel_mapping)
 
     def get_square_from_pixels(self, x, y, screen_width, screen_height):
         """Returns the square id from mouse position"""
@@ -78,6 +76,18 @@ class Board:
                 continue
             self.squares[piece.char + str(piece.num)] = piece
 
+    def get_squares_piece(self, char, num):
+        return self.squares.get(char + str(num))
+
     def setup_players(self, algorithms=None):
         """Sets up the players on the board"""
         self.players = [Player('B'), Player('W')]
+
+    def move_piece(self, piece, from_char, from_num, to_char, to_num):
+        # Create position strings
+        from_pos = from_char + str(from_num)
+        to_pos = to_char + str(to_num)
+        # Move piece
+        piece.char = to_char
+        piece.num = to_num
+        self.squares[from_pos] = piece
