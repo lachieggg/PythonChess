@@ -86,7 +86,7 @@ class Game:
             return
 
         if self.square_selected:
-            self.window.remove_prev_highlight(self.board, self.square_selected)
+            self.window.remove_prev_highlight(self.square_selected)
             if (self.square_selected.get('char') == char and self.square_selected.get('num') == num):
                 # User selected
                 # already selected square

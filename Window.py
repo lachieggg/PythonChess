@@ -44,7 +44,7 @@ class Window:
             return False
         return True
 
-    def remove_prev_highlight(self, board, selected_sq):
+    def remove_prev_highlight(self, selected_sq):
         """Remove highlight from previously highlighted square"""
         if not selected_sq:
             return
@@ -88,7 +88,6 @@ class Window:
                 y += SQUARE_WIDTH
                 key = char + str(num)
                 self.square_to_pixel_mapping[key] = (x, y)
-
 
         print('\n')
 
