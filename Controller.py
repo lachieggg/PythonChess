@@ -10,7 +10,8 @@ from Game import Game
 from Board import Board
 
 from pieces.Piece import Piece
-from PieceFactory import PieceFactory
+from factories.PieceFactory import PieceFactory
+
 class Controller:
     def __init__(self):
         # Pieces
@@ -20,7 +21,6 @@ class Controller:
         board = Board(pieces)
         # Window
         window = Window()
-        window.render_pieces(board)
         # Game
         game = Game(window, pieces, board)
 

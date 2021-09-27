@@ -7,7 +7,7 @@ from Board import Board
 from Window import Window
 
 from pieces.Piece import Piece
-from PieceFactory import PieceFactory
+from factories.PieceFactory import PieceFactory
 
 from pygame.locals import (
     K_ESCAPE,
@@ -24,6 +24,7 @@ class Game:
         """Initializer for the Game"""
         # Window
         self.window = window
+        self.window.render_pieces(pieces.values())
         # Pieces
         self.pieces = pieces
         # Board
@@ -45,7 +46,7 @@ class Game:
 
         x, y = pygame.mouse.get_pos()
         dimensions = self.window.get_screen_dimensions()
-        sq = self.board.get_square_from_pixels(x, y, *dimensions)
+        sq = self.window.get_square_from_pixels(x, y, *dimensions)
 
         if not sq:
             return
@@ -57,6 +58,7 @@ class Game:
         running = True
 
         while running:
+            self.window.render_pieces(list(self.pieces.values()))
             for event in pygame.event.get():
                 if event.type == KEYDOWN:
                     if event.key == K_ESCAPE:
@@ -68,7 +70,6 @@ class Game:
                 if event.type == MOUSEBUTTONDOWN:
                     self.handle_mouse_click()
 
-            self.window.render_pieces(self.board)
             pygame.display.flip()
 
         pygame.quit()
@@ -98,13 +99,16 @@ class Game:
 
                 piece = self.board.get_squares_piece(_char, _num)
                 if piece:
-                    print("moving piece")
+                    print("Moving piece")
                     print(piece)
                     print("Square of moving piece: " + _char + str(_num))
                     print("Square moving piece to: " + char + str(num))
+                    print("\n")
                     # Move piece
                     self.board.move_piece(piece, char, num, _char, _num)
+                    self.window.render_square(char, num)
+                    self.window.render_pieces(list(self.pieces.values()))
 
 
         self.square_selected = {'char': char, 'num': num}
-        self.window.highlight_sq(self.board, char, num)
+        self.window.highlight_sq(char, num)
