@@ -8,6 +8,7 @@ class Window:
     def __init__(self):
         """Initializer for the Window"""
         pygame.init()
+        pygame.display.set_caption('PythonChess')
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.screen.fill((255, 255, 255))
         self.bgimg = pygame.image.load_extended(BOARD_IMG_PATH)
@@ -17,10 +18,14 @@ class Window:
     def render_square(self, char, num):
         """Render a _blank_ square on the board"""
         colour = self.get_square_rgb(char, num)
-        #pygame.
+        pos = self.get_pixels_from_square(char, num)
+        rgb = self.get_square_rgb(char, num)
+        pygame.draw.rect(self.screen, rgb, [pos[0], pos[1], SQUARE_WIDTH, SQUARE_WIDTH])
 
     def render_piece(self, piece):
         """Render a piece in the window"""
+        if not piece:
+            return
         pos = piece.get_position() # Position eg. 'H5' or 'A3'
         [x, y] = self.get_pixels_from_square(*pos)
         icon = pygame.image.load_extended(piece.filename)
@@ -78,7 +83,7 @@ class Window:
 
     def map(self):
         """Map board squares to screen pixels for rendering and selecting squares"""
-        self.square_to_pixel_mapping = {}
+        self.pmap = {} # PMAP i.e. Pixel Map
 
         x = BORDER_WIDTH - SQUARE_WIDTH
         for char in CHARS:
@@ -87,7 +92,7 @@ class Window:
             for num in NUMS[::-1]:
                 y += SQUARE_WIDTH
                 key = char + str(num)
-                self.square_to_pixel_mapping[key] = (x, y)
+                self.pmap[key] = (x, y)
 
         print('\n')
 
@@ -111,10 +116,10 @@ class Window:
         if char not in CHARS or num not in NUMS:
             return False
 
-        return self.square_to_pixel_mapping.get(char + str(num))
+        return self.pmap.get(char + str(num))
 
 
     def get_square_pixel_limits(self, char, num):
         """Returns the pixel limits that constitute the mouse being over a square"""
-        x_min, y_min = self.square_to_pixel_mapping.get(char + str(num))
+        x_min, y_min = self.pmap.get(char + str(num))
         return [(x_min, x_min+SQUARE_WIDTH), (y_min, y_min+SQUARE_WIDTH)]

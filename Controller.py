@@ -22,7 +22,7 @@ class Controller:
         # Window
         window = Window()
         # Game
-        game = Game(window, pieces, board)
+        game = Game(window, board)
 
 def add_to_sys_path():
     """Add root folder to the path allowing imports from subdirectories"""

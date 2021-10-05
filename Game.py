@@ -20,15 +20,13 @@ from pygame.locals import (
 from Constants import *
 
 class Game:
-    def __init__(self, window, pieces, board):
+    def __init__(self, window, board):
         """Initializer for the Game"""
-        # Window
-        self.window = window
-        self.window.render_pieces(pieces.values())
-        # Pieces
-        self.pieces = pieces
         # Board
         self.board = board
+        # Window
+        self.window = window
+        self.window.render_pieces(self.board.pieces.values())
         # Players
         self.setup_players()
 
@@ -58,7 +56,6 @@ class Game:
         running = True
 
         while running:
-            self.window.render_pieces(list(self.pieces.values()))
             for event in pygame.event.get():
                 if event.type == KEYDOWN:
                     if event.key == K_ESCAPE:
@@ -70,6 +67,7 @@ class Game:
                 if event.type == MOUSEBUTTONDOWN:
                     self.handle_mouse_click()
 
+            self.window.render_pieces(list(self.board.pieces.values()))
             pygame.display.flip()
 
         pygame.quit()
@@ -86,29 +84,35 @@ class Game:
             return
 
         if self.square_selected:
+            print("Square already selected.")
             self.window.remove_prev_highlight(self.square_selected)
             if (self.square_selected.get('char') == char and self.square_selected.get('num') == num):
                 # User selected
                 # already selected square
+                print("Deselecting square")
+                print("\n")
                 self.square_selected = False
                 return
             else:
-                # Old square selected
+                # We are going to move a piece
+                #
+                # Save the piece's previous position
                 _char = self.square_selected.get('char')
                 _num = self.square_selected.get('num')
 
-                piece = self.board.get_squares_piece(_char, _num)
-                if piece:
-                    print("Moving piece")
-                    print(piece)
-                    print("Square of moving piece: " + _char + str(_num))
-                    print("Square moving piece to: " + char + str(num))
-                    print("\n")
-                    # Move piece
-                    self.board.move_piece(piece, char, num, _char, _num)
-                    self.window.render_square(char, num)
-                    self.window.render_pieces(list(self.pieces.values()))
+                # Move piece
+                #
+                # Clear the square we are moving to
+                self.window.render_square(char, num)
+                # Move the piece in the board
+                self.board.move_piece(_char, _num, char, num)
+                # Render the piece
+                self.window.render_square(_char, _num)
+                self.square_selected = False
+                return
 
-
+        print("Selecting square")
+        print("\n")
         self.square_selected = {'char': char, 'num': num}
+        print(char + str(num))
         self.window.highlight_sq(char, num)
