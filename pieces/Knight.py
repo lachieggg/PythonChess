@@ -9,6 +9,14 @@ class Knight(Piece):
     def moveable(self, board, to_char, to_num):
         """Determines whether the piece can move to a given square"""
 
+
+        victim = board.get_squares_piece(to_char, to_num)
+        # Attempting to take a piece
+        if(victim):
+            if(self.colour == victim.colour):
+                print("You cannot take a piece on your own team!")
+                return False
+                
         abs_delta_x = abs(ord(to_char) - ord(self.char))
         abs_delta_y = abs(to_num - self.num)
 
