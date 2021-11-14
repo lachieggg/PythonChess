@@ -12,10 +12,6 @@ class Board:
         self.pieces = pieces
 
     def get_squares_piece(self, char, num):
-        print(self.pieces)
-        key = char + str(num)
-        print(key)
-        print(self.pieces.get(key))
         return self.pieces.get(char + str(num))
 
     def setup_players(self, algorithms=None):
@@ -34,9 +30,15 @@ class Board:
         if not piece:
             print("Could not find piece on that square {}.".format(from_pos))
             return
+
+        if not piece.moveable(self, to_char, to_num):
+            print("That piece cannot move there.")
+            return
+
         # Move piece
         piece.char = to_char
         piece.num = to_num
+        piece.moved = True
         # Set
         self.pieces[to_pos] = piece
         self.pieces[from_pos] = None
