@@ -4,7 +4,7 @@ import sys
 import pygame
 import os
 
-from Player import Player
+from players.Player import Player
 from Window import Window
 from Game import Game
 from Board import Board

@@ -2,7 +2,8 @@ import sys
 import pygame
 import os
 
-from Player import Player
+from players.Player import Player
+from players.Computer import Computer
 from Board import Board
 from Window import Window
 
@@ -18,7 +19,7 @@ from pygame.locals import (
 )
 
 from Constants import *
-
+Player
 class Game:
     def __init__(self, window, board):
         """Initializer for the Game"""
@@ -33,9 +34,6 @@ class Game:
         self.square_selected = False
         # Main
         self.main()
-
-    def move_piece(self):
-        pass
 
     def handle_mouse_click(self):
         """Determines what to do when the user clicks the mouse"""
@@ -75,7 +73,7 @@ class Game:
     def setup_players(self, algorithms=None):
         """Creates the initial player objects"""
         self.player = Player(PLAYER_COLOUR)
-        self.computer = Player(COMPUTER_COLOUR)
+        self.computer = Computer(COMPUTER_COLOUR)
         self.players = {'player': self.player, 'computer': self.computer}
         self.turn = self.player
 
@@ -106,8 +104,8 @@ class Game:
                 # Clear the square we are moving to
                 self.window.render_square(char, num)
                 # Move the piece in the board
-                self.board.move_piece(self.player, self.turn, _char, _num, char, num)
-                self.turn = self.player if self.turn == self.computer else self.computer
+                moved = self.board.move_piece(self.player, self.turn, _char, _num, char, num)
+                if moved: self.turn = self.player if self.turn == self.computer else self.computer
                 # Render the piece
                 self.window.render_square(_char, _num)
                 self.square_selected = False

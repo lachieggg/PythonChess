@@ -15,7 +15,7 @@ COMPUTER_COLOUR = BLACK
 BOARD_WIDTH = BOARD_HEIGHT = 8
 
 ### Turns
-SANDBOX_MODE = True
+SANDBOX_MODE = False
 GOD_MODE = False
 
 ### Indexes

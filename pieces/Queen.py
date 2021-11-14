@@ -15,6 +15,8 @@ class Queen(Piece):
             rook = Rook(self.type, self.colour, self.char, self.num)
             bishop = Bishop(self.type, self.colour, self.char, self.num)
 
+            # Make sure at least one of thsee sub-pieces can move to that square
+            #
             if(rook.moveable(board, to_char, to_num)):
                 return True
             if(bishop.moveable(board, to_char, to_num)):

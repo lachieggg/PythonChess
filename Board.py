@@ -29,22 +29,22 @@ class Board:
         piece = self.pieces.get(from_pos)
         if not piece:
             print("Could not find piece on that square {}.".format(from_pos))
-            return
+            return False
 
-        if not player.colour == piece.colour and not SANDBOX_MODE:
+        if not player.colour == piece.colour and not SANDBOX_MODE and not GOD_MODE:
             # Sandbox mode allows you to use any piece
             print("That is not your piece to move.")
-            return
+            return False
 
-        if not turn == player and not GOD_MODE:
+        if not turn == player and not SANDBOX_MODE and not GOD_MODE:
             # God mode allows you to skip opposition's turn
             print("It is not currently your turn.")
-            return
+            return False
 
         if not piece.moveable(self, to_char, to_num) and not GOD_MODE:
             # God mode allows you to move any piece anywhere
             print("That piece cannot move there.")
-            return
+            return False
 
         # Move piece
         piece.char = to_char
@@ -53,3 +53,5 @@ class Board:
         # Set
         self.pieces[to_pos] = piece
         self.pieces[from_pos] = None
+
+        return True
