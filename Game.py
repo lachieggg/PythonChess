@@ -74,9 +74,10 @@ class Game:
 
     def setup_players(self, algorithms=None):
         """Creates the initial player objects"""
-        self.user = Player(WHITE)
-        self.computer = Player(BLACK)
-        self.players = {'user': self.user, 'computer': self.computer}
+        self.player = Player(PLAYER_COLOUR)
+        self.computer = Player(COMPUTER_COLOUR)
+        self.players = {'player': self.player, 'computer': self.computer}
+        self.turn = self.player
 
     def select_square(self, char, num):
         """Select a square"""
@@ -105,7 +106,8 @@ class Game:
                 # Clear the square we are moving to
                 self.window.render_square(char, num)
                 # Move the piece in the board
-                self.board.move_piece(_char, _num, char, num)
+                self.board.move_piece(self.player, self.turn, _char, _num, char, num)
+                self.turn = self.player if self.turn == self.computer else self.computer
                 # Render the piece
                 self.window.render_square(_char, _num)
                 self.square_selected = False

@@ -1,7 +1,22 @@
 import os
 
+
+### Teams
+WHITE = 'White'
+BLACK = 'Black'
+WHITE_ROW = 1
+BLACK_ROW = 8
+
+### Players
+PLAYER_COLOUR = WHITE
+COMPUTER_COLOUR = BLACK
+
 ### Size
 BOARD_WIDTH = BOARD_HEIGHT = 8
+
+### Turns
+SANDBOX_MODE = True
+GOD_MODE = False
 
 ### Indexes
 NUM_START = 1
@@ -49,12 +64,6 @@ PIECE_MAPPING = {
     ROOK:   'Rook',
     PAWN:   'Pawn'
 }
-
-### Teams
-WHITE = 'White'
-BLACK = 'Black'
-WHITE_ROW = 1
-BLACK_ROW = 8
 
 ### Pieces
 WHITE_MAIN_PIECES = [

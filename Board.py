@@ -18,7 +18,7 @@ class Board:
         """Sets up the players on the board"""
         self.players = [Player('B'), Player('W')]
 
-    def move_piece(self, from_char, from_num, to_char, to_num):
+    def move_piece(self, player, turn, from_char, from_num, to_char, to_num):
         """Move the piece on the board without rendering"""
         # Create position strings
         from_pos = from_char + str(from_num)
@@ -31,7 +31,18 @@ class Board:
             print("Could not find piece on that square {}.".format(from_pos))
             return
 
-        if not piece.moveable(self, to_char, to_num):
+        if not player.colour == piece.colour and not SANDBOX_MODE:
+            # Sandbox mode allows you to use any piece
+            print("That is not your piece to move.")
+            return
+
+        if not turn == player and not GOD_MODE:
+            # God mode allows you to skip opposition's turn
+            print("It is not currently your turn.")
+            return
+
+        if not piece.moveable(self, to_char, to_num) and not GOD_MODE:
+            # God mode allows you to move any piece anywhere
             print("That piece cannot move there.")
             return
 
