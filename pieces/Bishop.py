@@ -15,6 +15,13 @@ class Bishop(Piece):
                 print("Piece is in your way!")
                 return False
 
+            victim = board.get_squares_piece(to_char, to_num)
+            # Attempting to take a piece
+            if(victim):
+                if(self.colour == victim.colour):
+                    print("You cannot take a piece on your own team!")
+                    return False
+
             if(to_num > self.num):
                 # UP
                 if(to_char > self.char):
