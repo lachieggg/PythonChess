@@ -35,7 +35,7 @@ class Piece:
     def moveable(self, board, to_char, to_num):
         return False
 
-    def piece_in_move_path(self, board, to_char, to_num):
+    def path_clear(self, board, to_char, to_num):
         """Determines if there is a piece in the path of the piece moving to the new square"""
         # Vertical move
         if(self.char == to_char):
@@ -43,17 +43,50 @@ class Piece:
             for y in range(start, end):
                 if(board.get_squares_piece(self.char, y)):
                     print("Piece found at position " + self.char + " " + str(y))
-                    return True
-        # Horizontal move
-        if(self.num == to_num):
+                    return False
+        elif(self.num == to_num):
+            # Horizontal move
+            (start, end) = (ord(self.char)+1, ord(to_char)) if ord(to_char) > ord(self.char) else (ord(to_char)+1, ord(self.char))
             for x in range(ord(self.char)+1, ord(to_char)):
-                if(board.get_squares_piece(ord(x), self.num)):
-                    return True
+                if(board.get_squares_piece(chr(x), self.num)):
+                    return False
+        else:
+            # Diagonal
+            if(to_num > self.num):
+                # UP
+                if(to_char > self.char):
+                    height = to_num - self.num
+                    for n in range(1, height):
+                        char = chr(ord(self.char) + n)
+                        num = self.num + n
 
-        # Diagonal move
-        for x in range(ord(self.char)+1, ord(to_char)):
-            for y in range(self.num+1, to_num):
-                if(board.get_squares_piece(ord(x), y)):
-                    return True
+                        if(board.get_squares_piece(char, num)):
+                            return False
+                else:
+                    # LEFT
+                    height = to_num - self.num
+                    for n in range(1, height):
+                        char = chr(ord(self.char) - n)
+                        num = self.num + n
+                        if(board.get_squares_piece(char, num)):
+                            return False
+            else:
+                # DOWN
+                if(to_char > self.char):
+                    # RIGHT
+                    height = self.num - to_num
+                    for n in range(1, height):
+                        char = chr(ord(self.char) + n)
+                        num = self.num - n
+                        if(board.get_squares_piece(char, num)):
+                            return False
+                else:
+                    # LEFT
+                    height = self.num - to_num
+                    for n in range(1, height):
+                        char = chr(ord(self.char) - n)
+                        num = self.num - n
+                        if(board.get_squares_piece(char, num)):
+                            return False
 
-        return False
+        return True

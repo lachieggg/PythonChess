@@ -11,7 +11,6 @@ class Pawn(Piece):
 
         victim = board.get_squares_piece(to_char, to_num)
         # Attempting to take a piece
-        #
         if(victim):
             if(self.colour == victim.colour):
                 print("You cannot take a piece on your own team!")
@@ -27,14 +26,20 @@ class Pawn(Piece):
             return False
 
         # Attempting to move to a different column without taking a piece
-        #
         if(not to_char == self.char):
             return False
 
         # Attempting to move when a another piece is in path
-        #
-        if(self.piece_in_move_path(board, to_char, to_num)):
+        if(not self.path_clear(board, to_char, to_num)):
             print("Piece in your way!")
             return False
+
+        # First move allows maximum of 2 spaces, second maximum of 1 space
+        if(self.moved):
+            if(abs(to_num - self.num) > 1):
+                return False
+        else:
+            if(abs(to_num - self.num) > 2):
+                return False
 
         return True
