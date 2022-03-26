@@ -12,6 +12,7 @@ class Piece:
         self.colour = colour
         self.filename = self.get_filename()
         self.moved = False      # whether or not a piece has moved previously
+        self.value = PIECE_VALUES.get(self.type)
 
     def get_position(self):
         """Returns the position as a list"""
@@ -34,6 +35,19 @@ class Piece:
 
     def moveable(self, board, to_char, to_num):
         return False
+    
+    def get_possible_moves(self, board):
+        """Get all the possible moves for the piece"""
+        moves = []
+        for square in SQUARES:
+            if(VERBOSE): print(square)
+            if(self.moveable(board, square[0], int(square[1]))):
+                moves.append(square)
+        
+        print(SQUARES)
+        
+        print("Possible moves...")
+        return moves
 
     def path_clear(self, board, to_char, to_num):
         """Determines if there is a piece in the path of the piece moving to the new square"""
@@ -42,7 +56,7 @@ class Piece:
             (start, end) = (self.num+1, to_num) if to_num > self.num else (to_num+1, self.num)
             for y in range(start, end):
                 if(board.get_squares_piece(self.char, y)):
-                    print("Piece found at position " + self.char + " " + str(y))
+                    if(VERBOSE): print("Piece found at position " + self.char + " " + str(y))
                     return False
         elif(self.num == to_num):
             # Horizontal move
@@ -88,5 +102,4 @@ class Piece:
                         num = self.num - n
                         if(board.get_squares_piece(char, num)):
                             return False
-
         return True

@@ -1,4 +1,5 @@
 from pieces.Piece import Piece
+from Constants import *
 
 class Bishop(Piece):
     def __init__(self, type, colour, char, num):
@@ -7,19 +8,18 @@ class Bishop(Piece):
 
     def moveable(self, board, to_char, to_num):
             """Determines whether the piece can move to a given square"""
-
             char = self.char
             num = self.num
 
             if(not self.path_clear(board, to_char, to_num)):
-                print("Piece is in your way!")
+                if(VERBOSE): print("Piece is in your way!")
                 return False
 
             victim = board.get_squares_piece(to_char, to_num)
             # Attempting to take a piece
             if(victim):
                 if(self.colour == victim.colour):
-                    print("You cannot take a piece on your own team!")
+                    if(VERBOSE): print("You cannot take a piece on your own team!")
                     return False
 
             if(to_num > self.num):

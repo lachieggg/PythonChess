@@ -1,4 +1,5 @@
 from pieces.Piece import Piece
+from Constants import *
 
 class Knight(Piece):
     def __init__(self, type, colour, char, num):
@@ -14,7 +15,7 @@ class Knight(Piece):
         # Attempting to take a piece
         if(victim):
             if(self.colour == victim.colour):
-                print("You cannot take a piece on your own team!")
+                if(VERBOSE): print("You cannot take a piece on your own team!")
                 return False
                 
         abs_delta_x = abs(ord(to_char) - ord(self.char))

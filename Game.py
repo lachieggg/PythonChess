@@ -30,7 +30,7 @@ class Game:
         self.window.render_pieces(self.board.pieces.values())
         # Players
         self.setup_players()
-
+        
         self.square_selected = False
         # Main
         self.main()
@@ -64,6 +64,10 @@ class Game:
 
                 if event.type == MOUSEBUTTONDOWN:
                     self.handle_mouse_click()
+                
+                for piece in self.board.pieces.values():
+                    print(piece.get_possible_moves(self.board))
+
 
             self.window.render_pieces(list(self.board.pieces.values()))
             pygame.display.flip()
@@ -81,6 +85,8 @@ class Game:
         """Select a square"""
         if not char or not num:
             return
+        
+        if(VERBOSE): print(self.board.score('W'))
 
         if self.square_selected:
             print("Square already selected.")
@@ -114,5 +120,5 @@ class Game:
         print("Selecting square")
         print("\n")
         self.square_selected = {'char': char, 'num': num}
-        print(char + str(num))
+        if(VERBOSE): print(char + str(num))
         self.window.highlight_sq(char, num)

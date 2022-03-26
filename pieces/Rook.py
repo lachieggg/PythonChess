@@ -1,5 +1,7 @@
 from pieces.Piece import Piece
 
+from Constants import *
+
 class Rook(Piece):
     def __init__(self, type, colour, char, num):
         """Initializer for the Rook class"""
@@ -13,7 +15,7 @@ class Rook(Piece):
             num = self.num
 
             if(not self.path_clear(board, to_char, to_num)):
-                print("Piece is in your way!")
+                if(VERBOSE): print("Piece is in your way!")
                 return False
 
             if(not self.num == to_num):
@@ -24,7 +26,7 @@ class Rook(Piece):
             # Attempting to take a piece
             if(victim):
                 if(self.colour == victim.colour):
-                    print("You cannot take a piece on your own team!")
+                    if(VERBOSE): print("You cannot take a piece on your own team!")
                     return False
 
             return True

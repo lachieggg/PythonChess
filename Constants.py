@@ -2,8 +2,8 @@ import os
 
 
 ### Teams
-WHITE = 'White'
-BLACK = 'Black'
+WHITE = 'W'
+BLACK = 'B'
 WHITE_ROW = 1
 BLACK_ROW = 8
 
@@ -107,3 +107,33 @@ BLACK_PAWNS = [
     [PAWN, BLACK, 'H', BLACK_ROW-1]
 ]
 PIECES_DATA = WHITE_MAIN_PIECES + BLACK_MAIN_PIECES + WHITE_PAWNS + BLACK_PAWNS
+
+### Scoring
+PIECE_VALUES = {
+    PAWN:   1,
+    HORSE:  3,
+    BISHOP: 3,
+    ROOK:   5,
+    QUEEN:  9,
+    KING:   1
+}
+
+### Indexes
+TYPE_INDEX = 0
+COLOUR_INDEX = 1
+CHAR_INDEX = 2
+NUM_INDEX = 3
+
+### Squares
+SQUARES = []
+
+NUMS = [x for x in range(1,9)]
+LETTERS = [chr(ord('A')+x) for x in range(8)]
+
+for num in NUMS:
+    for char in LETTERS:
+        SQUARES.append(char + str(num))
+
+
+### VERBOSE 
+VERBOSE = False

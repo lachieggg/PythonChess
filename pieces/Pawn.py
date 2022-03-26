@@ -13,7 +13,7 @@ class Pawn(Piece):
         # Attempting to take a piece
         if(victim):
             if(self.colour == victim.colour):
-                print("You cannot take a piece on your own team!")
+                if(VERBOSE): print("You cannot take a piece on your own team!")
                 return False
             if(self.colour == WHITE): # White
                 if(to_num - self.num == 1):
@@ -31,7 +31,7 @@ class Pawn(Piece):
 
         # Attempting to move when a another piece is in path
         if(not self.path_clear(board, to_char, to_num)):
-            print("Piece in your way!")
+            if(VERBOSE): print("Piece in your way!")
             return False
 
         # First move allows maximum of 2 spaces, second maximum of 1 space

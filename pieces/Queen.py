@@ -2,6 +2,8 @@ from pieces.Piece import Piece
 from pieces.Rook import Rook
 from pieces.Bishop import Bishop
 
+from Constants import *
+
 class Queen(Piece):
     def __init__(self, type, colour, char, num):
         """Initializer for the Queen class"""
