@@ -24,6 +24,6 @@ class Knight(Piece):
         # Knights can move to positions where the absolute
         # value of the sum of the differences between the squares
         # is exactly 3
-        if(abs_delta_x + abs_delta_y == 3):
+        if((abs_delta_x == 2 and abs_delta_y) == 1 or (abs_delta_x == 1 and abs_delta_y == 2)):
             return True
         return False

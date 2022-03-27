@@ -1,6 +1,5 @@
 import os
 
-
 ### Teams
 WHITE = 'W'
 BLACK = 'B'
@@ -15,7 +14,7 @@ COMPUTER_COLOUR = BLACK
 BOARD_WIDTH = BOARD_HEIGHT = 8
 
 ### Turns
-SANDBOX_MODE = False
+SANDBOX_MODE = True
 GOD_MODE = False
 
 ### Indexes

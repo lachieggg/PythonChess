@@ -66,12 +66,4 @@ class Board:
         del self.pieces[from_pos]
 
         return True
-    
-    def get_possible_moves(self, player):
-        # Pawns
-        colour = player.colour
-        for piece in self.pieces.values():
-            if(piece.colour == colour):
-                pass
-                #moves += 
-                
+

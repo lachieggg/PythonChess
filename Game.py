@@ -3,7 +3,6 @@ import pygame
 import os
 
 from players.Player import Player
-from players.Computer import Computer
 from Board import Board
 from Window import Window
 
@@ -19,7 +18,11 @@ from pygame.locals import (
 )
 
 from Constants import *
-Player
+
+from search.Tree import Tree
+from search.Move import Move
+from search.Node import Node
+
 class Game:
     def __init__(self, window, board):
         """Initializer for the Game"""
@@ -34,6 +37,9 @@ class Game:
         self.square_selected = False
         # Main
         self.main()
+        # Search
+        #self.node = Node()
+        #self.tree = Tree()
 
     def handle_mouse_click(self):
         """Determines what to do when the user clicks the mouse"""
@@ -64,10 +70,9 @@ class Game:
 
                 if event.type == MOUSEBUTTONDOWN:
                     self.handle_mouse_click()
-                
-                for piece in self.board.pieces.values():
-                    print(piece.get_possible_moves(self.board))
 
+                for player in self.players.values():
+                    print(player.get_possible_moves_for_player(self.board))
 
             self.window.render_pieces(list(self.board.pieces.values()))
             pygame.display.flip()
@@ -77,7 +82,7 @@ class Game:
     def setup_players(self, algorithms=None):
         """Creates the initial player objects"""
         self.player = Player(PLAYER_COLOUR)
-        self.computer = Computer(COMPUTER_COLOUR)
+        self.computer = Player(COMPUTER_COLOUR)
         self.players = {'player': self.player, 'computer': self.computer}
         self.turn = self.player
 
@@ -89,13 +94,13 @@ class Game:
         if(VERBOSE): print(self.board.score('W'))
 
         if self.square_selected:
-            print("Square already selected.")
+            if(VERBOSE): print("Square already selected.")
             self.window.remove_prev_highlight(self.square_selected)
             if (self.square_selected.get('char') == char and self.square_selected.get('num') == num):
                 # User selected
                 # already selected square
-                print("Deselecting square")
-                print("\n")
+                if(VERBOSE): print("Deselecting square")
+                if(VERBOSE): print("\n")
                 self.square_selected = False
                 return
             else:
@@ -117,8 +122,8 @@ class Game:
                 self.square_selected = False
                 return
 
-        print("Selecting square")
-        print("\n")
+        if(VERBOSE): print("Selecting square")
+        if(VERBOSE): print("\n")
         self.square_selected = {'char': char, 'num': num}
         if(VERBOSE): print(char + str(num))
         self.window.highlight_sq(char, num)

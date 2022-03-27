@@ -32,21 +32,28 @@ class Piece:
         name = self.colour + ' ' + self.get_type_name() + ' '
         pos = self.char + str(self.num)
         return name + pos
-
-    def moveable(self, board, to_char, to_num):
-        return False
     
-    def get_possible_moves(self, board):
-        """Get all the possible moves for the piece"""
+    def get_possible_moves_for_piece(self, board):
+        """
+        Get all the possible moves for the piece, 'simple and readable' edition.
+
+        Simply iterates over all squares and uses the movable method to check.
+
+        For more efficiency, we could limit the search to only the squares
+        for which the individual pieces can actually reach, rather than checking
+        every single square, since, for instance, a rook cannot ever travel 
+        diagonally, so we can significantly limit the search space.
+
+        However this would be less elegant than a single parent class implementation,
+        and currently, efficiency is not the focus of this project.
+        """
         moves = []
-        for square in SQUARES:
-            if(VERBOSE): print(square)
-            if(self.moveable(board, square[0], int(square[1]))):
-                moves.append(square)
-        
-        print(SQUARES)
-        
-        print("Possible moves...")
+        curr_square = self.char + str(self.num)
+        for future_square in SQUARES:
+            if(VERBOSE): print(future_square)
+            if(self.moveable(board, future_square[0], int(future_square[1]))):
+                moves.append([curr_square, future_square])
+                
         return moves
 
     def path_clear(self, board, to_char, to_num):
