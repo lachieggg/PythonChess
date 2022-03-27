@@ -136,3 +136,6 @@ for num in NUMS:
 
 ### VERBOSE 
 VERBOSE = False
+
+### Tree
+DEPTH = 5

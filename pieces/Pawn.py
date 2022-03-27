@@ -6,8 +6,9 @@ class Pawn(Piece):
         """Initializer for the Pawn class"""
         super().__init__(type, colour, char, num)
 
-    def moveable(self, board, to_char, to_num):
+    def moveable(self, board, _to):
         """Determines whether the piece can move to a given square"""
+        to_char, to_num = _to[0], int(_to[1])
 
         victim = board.get_squares_piece(to_char, to_num)
         # Attempting to take a piece

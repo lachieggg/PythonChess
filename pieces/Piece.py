@@ -9,10 +9,10 @@ class Piece:
         self.type = type        # K for King, Q for Queen
         self.char = char        # horizontal position
         self.num = num          # vertical position
-        self.colour = colour
-        self.filename = self.get_filename()
+        self.colour = colour    # colour of the piece
         self.moved = False      # whether or not a piece has moved previously
         self.value = PIECE_VALUES.get(self.type)
+        self.filename = self.get_filename()
 
     def get_position(self):
         """Returns the position as a list"""
@@ -44,8 +44,8 @@ class Piece:
         every single square, since, for instance, a rook cannot ever travel 
         diagonally, so we can significantly limit the search space.
 
-        However this would be less elegant than a single parent class implementation,
-        and currently, efficiency is not the focus of this project.
+        This would be less elegant than a single parent class implementation,
+        and currently efficiency is not the focus of this project.
         """
         moves = []
         curr_square = self.char + str(self.num)

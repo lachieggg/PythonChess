@@ -16,13 +16,20 @@ class Controller:
     def __init__(self):
         # Pieces
         self.piece_factory = PieceFactory()
-        pieces = self.piece_factory.get_pieces()
+        self.pieces = self.piece_factory.get_pieces()
         # Board
-        board = Board(pieces)
+        self.board = Board(self.pieces)
         # Window
-        window = Window()
+        self.window = Window()
         # Game
-        game = Game(window, board)
+        self.game = Game(self.window, self.board)
+        # Run
+        self.run()
+    
+    def run(self):
+        """Run the main PyGame loop in the Game class"""
+        try: self.game.main()
+        except KeyboardInterrupt as e: print('\nExiting')
 
 def add_to_sys_path():
     """Add root folder to the path allowing imports from subdirectories"""

@@ -5,11 +5,10 @@ class Knight(Piece):
     def __init__(self, type, colour, char, num):
         """Initializer for the Knight class"""
         super().__init__(type, colour, char, num)
-        pass
 
-    def moveable(self, board, to_char, to_num):
+    def moveable(self, board, _to):
         """Determines whether the piece can move to a given square"""
-
+        to_char, to_num = _to[0], int(_to[1])
 
         victim = board.get_squares_piece(to_char, to_num)
         # Attempting to take a piece

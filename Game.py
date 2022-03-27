@@ -3,11 +3,16 @@ import pygame
 import os
 
 from players.Player import Player
+from pieces.Piece import Piece
 from Board import Board
 from Window import Window
-
-from pieces.Piece import Piece
 from factories.PieceFactory import PieceFactory
+
+from Constants import *
+
+from search.Tree import Tree
+from search.Move import Move
+from search.Node import Node
 
 from pygame.locals import (
     K_ESCAPE,
@@ -16,12 +21,6 @@ from pygame.locals import (
     MOUSEBUTTONDOWN,
     MOUSEBUTTONUP
 )
-
-from Constants import *
-
-from search.Tree import Tree
-from search.Move import Move
-from search.Node import Node
 
 class Game:
     def __init__(self, window, board):
@@ -33,10 +32,8 @@ class Game:
         self.window.render_pieces(self.board.pieces.values())
         # Players
         self.setup_players()
-        
         self.square_selected = False
-        # Main
-        self.main()
+        self.debug = False
         # Search
         #self.node = Node()
         #self.tree = Tree()
@@ -53,7 +50,7 @@ class Game:
         if not sq:
             return
 
-        self.select_square(sq[0], int(sq[1]))
+        self.select_square(sq)
 
     def main(self):
         """Main PyGame loop - renders game and registers user input"""
@@ -69,10 +66,17 @@ class Game:
                     running = False
 
                 if event.type == MOUSEBUTTONDOWN:
-                    self.handle_mouse_click()
+                    if(event.button == 1):
+                        self.handle_mouse_click()
+                    if(event.button == 3):
+                        self.debug = not self.debug
 
-                for player in self.players.values():
-                    print(player.get_possible_moves_for_player(self.board))
+                if(self.debug):
+                    for player in self.players.values():
+                        #print(player.get_possible_moves_for_player(self.board))
+                        print("Greedy move for player {} is: ".format(player.colour))
+                        print(player.get_greedy_move_for_player(self.board))
+                        print(self.board.pieces)
 
             self.window.render_pieces(list(self.board.pieces.values()))
             pygame.display.flip()
@@ -86,9 +90,9 @@ class Game:
         self.players = {'player': self.player, 'computer': self.computer}
         self.turn = self.player
 
-    def select_square(self, char, num):
+    def select_square(self, sq):
         """Select a square"""
-        if not char or not num:
+        if not sq:
             return
         
         if(VERBOSE): print(self.board.score('W'))
@@ -96,7 +100,7 @@ class Game:
         if self.square_selected:
             if(VERBOSE): print("Square already selected.")
             self.window.remove_prev_highlight(self.square_selected)
-            if (self.square_selected.get('char') == char and self.square_selected.get('num') == num):
+            if (self.square_selected == sq):
                 # User selected
                 # already selected square
                 if(VERBOSE): print("Deselecting square")
@@ -107,23 +111,24 @@ class Game:
                 # We are going to move a piece
                 #
                 # Save the piece's previous position
-                _char = self.square_selected.get('char')
-                _num = self.square_selected.get('num')
+
+                #_char = self.square_selected.get('char')
+                #_num = self.square_selected.get('num')
 
                 # Move piece
                 #
                 # Clear the square we are moving to
-                self.window.render_square(char, num)
+                self.window.render_square(sq)
                 # Move the piece in the board
-                moved = self.board.move_piece(self.player, self.turn, _char, _num, char, num)
+                moved = self.board.move_piece(self.square_selected, sq)
                 if moved: self.turn = self.player if self.turn == self.computer else self.computer
                 # Render the piece
-                self.window.render_square(_char, _num)
+                self.window.render_square(self.square_selected)
                 self.square_selected = False
                 return
 
         if(VERBOSE): print("Selecting square")
         if(VERBOSE): print("\n")
-        self.square_selected = {'char': char, 'num': num}
+        self.square_selected = sq
         if(VERBOSE): print(char + str(num))
-        self.window.highlight_sq(char, num)
+        self.window.highlight_sq(sq)

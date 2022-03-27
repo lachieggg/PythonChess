@@ -9,8 +9,9 @@ class Queen(Piece):
         """Initializer for the Queen class"""
         super().__init__(type, colour, char, num)
 
-    def moveable(self, board, to_char, to_num):
+    def moveable(self, board, _to):
             """Determines whether the piece can move to a given square"""
+            to_char, to_num = _to[0], int(_to[1])
 
             # A queen is just a bishop and a rook rolled into one piece
             #
@@ -19,9 +20,9 @@ class Queen(Piece):
 
             # Make sure at least one of thsee sub-pieces can move to that square
             #
-            if(rook.moveable(board, to_char, to_num)):
+            if(rook.moveable(board, _to)):
                 return True
-            if(bishop.moveable(board, to_char, to_num)):
+            if(bishop.moveable(board, _to)):
                 return True
 
             return False

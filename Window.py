@@ -15,8 +15,10 @@ class Window:
         self.screen.blit(self.bgimg, (0, 0))
         self.map()
 
-    def render_square(self, char, num):
+    def render_square(self, sq):
         """Render a _blank_ square on the board"""
+        char = sq[0]
+        num = int(sq[1])
         colour = self.get_square_rgb(char, num)
         pos = self.get_pixels_from_square(char, num)
         rgb = self.get_square_rgb(char, num)
@@ -54,9 +56,9 @@ class Window:
         if not selected_sq:
             return
 
-        char, num = list(selected_sq.values())
+        char, num = selected_sq[0], int(selected_sq[1])
         pixel_coords = self.get_pixels_from_square(char, num)
-        square_rgb = self.get_square_rgb(*list(selected_sq.values()))
+        square_rgb = self.get_square_rgb(char, num)
         sq_width = SQUARE_WIDTH
         pygame.draw.rect(
             self.screen,
@@ -65,8 +67,9 @@ class Window:
             HIGHLIGHTING_WIDTH
         )
 
-    def highlight_sq(self, char, num):
+    def highlight_sq(self, sq):
         """Highlight a square on the Window"""
+        char, num = sq[0], int(sq[1])
         coords = self.get_pixels_from_square(char, num)
         x, y = coords
 

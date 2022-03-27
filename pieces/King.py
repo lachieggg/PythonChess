@@ -7,10 +7,10 @@ class King(Piece):
         super().__init__(type, colour, char, num)
         pass
 
-
-    def moveable(self, board, to_char, to_num):
+    def moveable(self, board, _to):
         """Determines whether the piece can move to a given square"""
-
+        to_char, to_num = _to[0], int(_to[1])
+        
         if(not self.path_clear(board, to_char, to_num)):
             if(VERBOSE): print("Piece is in your way!")
             return False
