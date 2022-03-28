@@ -3,6 +3,7 @@ import os
 from Player import Player
 from pieces.Piece import Piece
 from Constants import *
+from pieces.Pawn import Pawn
 
 class Board:
     def __init__(self, pieces):
@@ -20,7 +21,6 @@ class Board:
         """Calculate the score of a player"""
         score = 0
         for piece in self.pieces.values():
-            #print(piece)
             if(piece.colour == colour):
                 score += piece.value
             else:
@@ -31,19 +31,26 @@ class Board:
         """Sets up the players on the board"""
         self.players = [Player('B'), Player('W')]
 
-    def move_piece(self, _from, _to, force=False):
+    def move_piece(self, _from, _to, scoring=False):
         """Move the piece on the board without rendering"""
         # Create position strings
         if(VERBOSE): print("From = " + _from)
         if(VERBOSE): print("To = " + _to)
         # Piece
+        
         piece = self.pieces.get(_from)
-        if not piece and not force:
+        if(type(piece) == Pawn) and scoring:
+            # Allow all movement for pawns in scoring
+            piece.moved = False
+
+        if not piece:
             print("Could not find piece on that square {}.".format(_from))
             return False
 
-        if not piece.moveable(self, _to) and not GOD_MODE and not force:
+        if not piece.moveable(self, _to) and not GOD_MODE and not scoring:
             # God mode allows you to move any piece anywhere
+            # If we are scoring a board allow undoing moves for pawns
+            print("Piece = {}, from = {} to = {}".format(piece, _from, _to))
             print("That piece cannot move there.")
             return False
 

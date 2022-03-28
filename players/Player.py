@@ -34,22 +34,13 @@ class Player:
             _from = move[0]
             _to = move[1]
 
-            #from_char = _from[0]
-            #from_num = int(_from[1])
-
-            #to_char = _to[0]
-            #to_num = int(_to[1])
-
-            b.move_piece(_from, _to)
+            b.move_piece(_from, _to, True)
             score = b.score(self.colour)
-            print("Score for {} = {}".format(move, score))
             if(score > best_score):
-                print("New best score")
                 best_score = score
                 best_move = move
             # Undo move
-            print("Undoing move")
             b.move_piece(_to, _from, True)
-            print("Done undo move")
 
+        print("Best score = {}".format(best_score))
         return best_move

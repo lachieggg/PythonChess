@@ -51,7 +51,7 @@ class Piece:
         curr_square = self.char + str(self.num)
         for future_square in SQUARES:
             if(VERBOSE): print(future_square)
-            if(self.moveable(board, future_square[0], int(future_square[1]))):
+            if(self.moveable(board, future_square)):
                 moves.append([curr_square, future_square])
                 
         return moves

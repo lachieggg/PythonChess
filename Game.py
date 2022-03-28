@@ -76,7 +76,6 @@ class Game:
                         #print(player.get_possible_moves_for_player(self.board))
                         print("Greedy move for player {} is: ".format(player.colour))
                         print(player.get_greedy_move_for_player(self.board))
-                        print(self.board.pieces)
 
             self.window.render_pieces(list(self.board.pieces.values()))
             pygame.display.flip()
