@@ -31,16 +31,22 @@ class Player:
         b = copy.deepcopy(board)
 
         for move in moves:
+            # Create a new board to evaluate the score for
+            # this particular move
+            b = copy.deepcopy(board)
+
             _from = move[0]
             _to = move[1]
 
-            b.move_piece(_from, _to, True)
+            b.move_piece(_from, _to)
             score = b.score(self.colour)
             if(score > best_score):
                 best_score = score
                 best_move = move
-            # Undo move
-            b.move_piece(_to, _from, True)
+            
 
         print("Best score = {}".format(best_score))
         return best_move
+    
+    def get_minimax_best_move_for_player(self, board):
+        pass

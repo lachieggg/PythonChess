@@ -4,6 +4,7 @@ from Player import Player
 from pieces.Piece import Piece
 from Constants import *
 from pieces.Pawn import Pawn
+from pieces.King import King
 
 class Board:
     def __init__(self, pieces):
@@ -31,25 +32,21 @@ class Board:
         """Sets up the players on the board"""
         self.players = [Player('B'), Player('W')]
 
-    def move_piece(self, _from, _to, scoring=False):
+    def move_piece(self, _from, _to):
         """Move the piece on the board without rendering"""
         # Create position strings
         if(VERBOSE): print("From = " + _from)
         if(VERBOSE): print("To = " + _to)
+
         # Piece
-        
         piece = self.pieces.get(_from)
-        if(type(piece) == Pawn) and scoring:
-            # Allow all movement for pawns in scoring
-            piece.moved = False
 
         if not piece:
             print("Could not find piece on that square {}.".format(_from))
             return False
 
-        if not piece.moveable(self, _to) and not GOD_MODE and not scoring:
+        if not piece.moveable(self, _to) and not GOD_MODE:
             # God mode allows you to move any piece anywhere
-            # If we are scoring a board allow undoing moves for pawns
             print("Piece = {}, from = {} to = {}".format(piece, _from, _to))
             print("That piece cannot move there.")
             return False
@@ -63,4 +60,19 @@ class Board:
         del self.pieces[_from]
 
         return True
-
+    
+    def is_terminal(self):
+        """Determines whether the board is in a terminal state, i.e. if a player has won, and returns that winning player"""
+        players_with_king = []
+        for p in self.pieces:
+            if(type(p) == type(King())):
+                players_with_king.append(p.colour)
+        
+        if(len(players_with_king) == 1):
+            if(players_with_king[0] == WHITE):
+                # White has won
+                return WHITE
+            if(players_with_king[0] == BLACK):
+                # Black has won
+                return BLACK
+        return False

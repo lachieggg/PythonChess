@@ -10,9 +10,9 @@ from factories.PieceFactory import PieceFactory
 
 from Constants import *
 
-from search.Tree import Tree
-from search.Move import Move
-from search.Node import Node
+#from search.Tree import Tree
+#from search.Move import Move
+#from search.Node import Node
 
 from pygame.locals import (
     K_ESCAPE,
@@ -68,12 +68,12 @@ class Game:
                 if event.type == MOUSEBUTTONDOWN:
                     if(event.button == 1):
                         self.handle_mouse_click()
-                    if(event.button == 3):
+                    if(event.button == 3 and DEBUGGABLE):
                         self.debug = not self.debug
 
                 if(self.debug):
                     for player in self.players.values():
-                        #print(player.get_possible_moves_for_player(self.board))
+                        print(player.get_possible_moves_for_player(self.board))
                         print("Greedy move for player {} is: ".format(player.colour))
                         print(player.get_greedy_move_for_player(self.board))
 

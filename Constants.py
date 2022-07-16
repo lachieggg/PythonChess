@@ -139,3 +139,6 @@ VERBOSE = False
 
 ### Tree
 DEPTH = 5
+
+### Debuggable
+DEBUGGABLE = False
