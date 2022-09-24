@@ -2,7 +2,7 @@ import sys
 import pygame
 import os
 
-from players.Player import Player
+from Player import Player
 from pieces.Piece import Piece
 from Board import Board
 from Window import Window
@@ -10,9 +10,7 @@ from factories.PieceFactory import PieceFactory
 
 from Constants import *
 
-#from search.Tree import Tree
-#from search.Move import Move
-#from search.Node import Node
+from search.MinimaxSearch import MinimaxSearch
 
 from pygame.locals import (
     K_ESCAPE,
@@ -34,9 +32,6 @@ class Game:
         self.setup_players()
         self.square_selected = False
         self.debug = False
-        # Search
-        #self.node = Node()
-        #self.tree = Tree()
 
     def handle_mouse_click(self):
         """Determines what to do when the user clicks the mouse"""
@@ -67,15 +62,16 @@ class Game:
 
                 if event.type == MOUSEBUTTONDOWN:
                     if(event.button == 1):
+                        # Left Click
                         self.handle_mouse_click()
-                    if(event.button == 3 and DEBUGGABLE):
+                    if(event.button == 3):
+                        # Right click
                         self.debug = not self.debug
-
-                if(self.debug):
-                    for player in self.players.values():
-                        print(player.get_possible_moves_for_player(self.board))
-                        print("Greedy move for player {} is: ".format(player.colour))
-                        print(player.get_greedy_move_for_player(self.board))
+                        for player in self.players.values():
+                            print(player.get_possible_moves_for_player(self.board))
+                            print("Greedy move for player {} is: ".format(player.colour))
+                            print(player.get_minimax_best_move_for_player(self.board))
+                            print("\n")
 
             self.window.render_pieces(list(self.board.pieces.values()))
             pygame.display.flip()
@@ -107,16 +103,10 @@ class Game:
                 self.square_selected = False
                 return
             else:
-                # We are going to move a piece
-                #
-                # Save the piece's previous position
-
-                #_char = self.square_selected.get('char')
-                #_num = self.square_selected.get('num')
-
                 # Move piece
                 #
-                # Clear the square we are moving to
+                # Clear the square we are moving to (in the window)
+                #
                 self.window.render_square(sq)
                 # Move the piece in the board
                 moved = self.board.move_piece(self.square_selected, sq)
