@@ -11,16 +11,20 @@ class Player:
         self.moved = False
         self.colour = colour
         self.minimax = MinimaxSearch()
-
+        
     def __str__(self):
         """Represent the player as a string"""
         return "Player " + str(self.colour) + "\n"
 
-    def get_possible_moves_for_player(self, board):
-        """Get all the possible moves for a player"""
+    def get_possible_moves_for_player(self, board, me=True):
+        """
+        Get all the possible moves for a player
+        'me' => True will return this player's moves, 
+        'me' => False will return opponent's movies
+        """
         moves = []
         for piece in board.pieces.values():
-            if(piece.colour == self.colour):
+            if((piece.colour == self.colour) == me):
                 pieces_moves = piece.get_possible_moves_for_piece(board)
                 moves += pieces_moves
 

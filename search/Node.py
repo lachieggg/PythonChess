@@ -1,7 +1,5 @@
 class Node:
-    def __init__(self, children, board):
-        self.children = children
+    def __init__(self, board=None, move=None, children=[]):
         self.board = board
-    
-    def generate_children(self):
-        pass
+        self.move = move
+        self.children = children

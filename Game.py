@@ -69,7 +69,7 @@ class Game:
                         self.debug = not self.debug
                         for player in self.players.values():
                             print(player.get_possible_moves_for_player(self.board))
-                            print("Greedy move for player {} is: ".format(player.colour))
+                            print("Minimax move for player {} is: ".format(player.colour))
                             print(player.get_minimax_best_move_for_player(self.board))
                             print("\n")
 

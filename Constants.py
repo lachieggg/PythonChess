@@ -138,4 +138,4 @@ for num in NUMS:
 VERBOSE = False
 
 ### Tree
-DEPTH = 5
+DEPTH = 2
