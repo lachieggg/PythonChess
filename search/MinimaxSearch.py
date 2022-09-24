@@ -7,14 +7,14 @@ class MinimaxSearch:
         pass
 
     def minimaxSearch(self, board, depth, player):
-        print("Search!")
         self.player = player
         self.tree = Node(board)
         self.board = board
-        self.buildTree(self.tree, depth, True)
+        self.buildTree(self.tree, depth, player, True)
         print(len(self.tree.children))
+        print(self.tree.children)
     
-    def buildTree(self, node, depth, me):
+    def buildTree(self, node, depth, player, me):
         if(depth == 0):
             return
         # Build a Minimax search tree
@@ -28,7 +28,8 @@ class MinimaxSearch:
             n.board = b
             print(move)
             n.move = move
+            n.score = self.board.score(player.colour)
             node.children.append(n)
-            self.buildTree(n, depth-1, not me)
+            self.buildTree(n, depth-1, player, not me)
 
         pass
