@@ -18,16 +18,22 @@ class Pawn(Piece):
                 return False
             if(self.colour == WHITE): # White
                 if(to_num - self.num == 1):
-                    if(not to_char == self.char):
+                    if abs(ord(to_char) - ord(self.char)) == 1:
                         return True
             else:
                 if(self.num - to_num == 1):
-                    if(not to_char == self.char):
+                    if abs(ord(to_char) - ord(self.char)) == 1:
                         return True
             return False
 
         # Attempting to move to a different column without taking a piece
         if(not to_char == self.char):
+            return False
+
+        # Enforce direction: white moves up, black moves down
+        if self.colour == WHITE and to_num <= self.num:
+            return False
+        if self.colour == BLACK and to_num >= self.num:
             return False
 
         # Attempting to move when a another piece is in path

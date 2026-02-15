@@ -1,5 +1,6 @@
 import os
 import sys
+import copy
 
 from Constants import *
 
@@ -35,24 +36,31 @@ class Piece:
     
     def get_possible_moves_for_piece(self, board):
         """
-        Get all the possible moves for the piece, 'simple and readable' edition.
-
-        Simply iterates over all squares and uses the movable method to check.
-
-        For more efficiency, we could limit the search to only the squares
-        for which the individual pieces can actually reach, rather than checking
-        every single square, since, for instance, a rook cannot ever travel 
-        diagonally, so we can significantly limit the search space.
-
-        This would be less elegant than a single parent class implementation,
-        and currently efficiency is not the focus of this project.
+        Get all the possible moves for the piece, filtering out moves that leave
+        the King in check.
         """
         moves = []
         curr_square = self.char + str(self.num)
+        
+        # 1. Find all pseudo-legal moves (geometric/rule-based)
+        pseudo_moves = []
         for future_square in SQUARES:
-            if(VERBOSE): print(future_square)
             if(self.moveable(board, future_square)):
-                moves.append([curr_square, future_square])
+                pseudo_moves.append(future_square)
+        
+        # 2. Filter out moves that result in check
+        for move_to in pseudo_moves:
+            # Create a deepcopy to simulate the move
+            temp_board = copy.deepcopy(board)
+            
+            # Execute the move on the temp board
+            # move_piece might print if VERBOSE is on, so we accept that risk
+            # given it's a simple project without logging config
+            temp_board.move_piece(curr_square, move_to)
+            
+            # Check if this move leaves our King in check
+            if not temp_board.is_in_check(self.colour):
+                moves.append([curr_square, move_to])
                 
         return moves
 
@@ -68,7 +76,7 @@ class Piece:
         elif(self.num == to_num):
             # Horizontal move
             (start, end) = (ord(self.char)+1, ord(to_char)) if ord(to_char) > ord(self.char) else (ord(to_char)+1, ord(self.char))
-            for x in range(ord(self.char)+1, ord(to_char)):
+            for x in range(start, end):
                 if(board.get_squares_piece(chr(x), self.num)):
                     return False
         else:

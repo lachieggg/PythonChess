@@ -61,18 +61,39 @@ class Board:
 
         return True
     
-    def is_terminal(self):
-        """Determines whether the board is in a terminal state, i.e. if a player has won, and returns that winning player"""
-        players_with_king = []
-        for p in self.pieces:
-            if(type(p) == type(King())):
-                players_with_king.append(p.colour)
+    def is_in_check(self, colour):
+        """Checks if the King of the given colour is under attack"""
+        king_pos = None
+        for piece in self.pieces.values():
+            if isinstance(piece, King) and piece.colour == colour:
+                king_pos = piece.char + str(piece.num)
+                break
         
-        if(len(players_with_king) == 1):
-            if(players_with_king[0] == WHITE):
-                # White has won
-                return WHITE
-            if(players_with_king[0] == BLACK):
-                # Black has won
-                return BLACK
+        if not king_pos:
+            return False 
+
+        # Iterate all enemy pieces to see if any can attack the King
+        for piece in self.pieces.values():
+            if piece.colour != colour:
+                if piece.moveable(self, king_pos):
+                    return True
+        return False
+
+    def is_terminal(self):
+        """
+        Determines whether the board is in a terminal state.
+        Returns:
+            WHITE if White wins
+            BLACK if Black wins
+            'Stalemate' if draw
+            False if game continues
+        """
+        # Improved terminal check using legal moves will be implemented 
+        # via Player.get_possible_moves_for_player checking for checkmate
+        # For now, keep the king capture logic as fallback until move filtering is in place
+        
+        kings = [p for p in self.pieces.values() if isinstance(p, King)]
+        if len(kings) < 2:
+            return WHITE if any(k.colour == WHITE for k in kings) else BLACK
+            
         return False

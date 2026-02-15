@@ -53,6 +53,6 @@ class Player:
         print("Best score = {}".format(best_score))
         return best_move
     
-    def get_minimax_best_move_for_player(self, board):
+    def get_minimax_best_move_for_player(self, board, window=None):
         """Minimax approach for best move N moves ahead"""
-        self.minimax.minimaxSearch(board, DEPTH, self)
+        return self.minimax.minimaxSearch(board, DEPTH, self, window)

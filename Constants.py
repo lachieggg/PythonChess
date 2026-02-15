@@ -27,25 +27,33 @@ CHARS = [chr(c) for c in range(CHAR_START, CHAR_START+BOARD_WIDTH)]
 
 ### Widths
 PIECE_WIDTH = 20
-SQUARE_WIDTH = 75
-BORDER_WIDTH = 50
+SQUARE_WIDTH = 80
+BORDER_WIDTH = 80
+PIECE_HEIGHT = 60 # target height for scaling pieces
+
+### Drawing Offsets
+# Piece offsets are now calculated dynamically in Window.py
 
 ### Images
-BOARD_IMG_PATH = os.getcwd() + '/' + 'assets/' + 'board/' + 'board.png'
+BOARD = 'board.png'
+BOARD_IMG_PATH = os.getcwd() + '/' + 'assets/' + 'board/' + BOARD
 ASSETS_IMG_PATH = os.getcwd() + '/' + 'assets' + '/'
 
 ### Screen
-SCREEN_WIDTH = 700
-SCREEN_HEIGHT = 700
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 800
 SCREEN_DIMENSIONS = (SCREEN_WIDTH, SCREEN_HEIGHT)
 
 ### Colours
 CREAM_RGB = (248, 248, 151)
 BROWN_RGB = (107, 73, 4)
 RED_RGB   = (255, 0, 0)
+GREEN_RGB = (0, 255, 0)
+BLUE_RGB  = (0, 0, 255)
 
 ### Highlighting
-HIGHLIGHTING_WIDTH = 1
+SHOW_MOVE_HIGHLIGHTS = False
+HIGHLIGHTING_WIDTH = 3
 
 ### Pieces
 BISHOP = 'B'
@@ -137,5 +145,8 @@ for num in NUMS:
 ### VERBOSE 
 VERBOSE = False
 
+### Animation settings
+ANIMATION_SPEED = 0.1 # Move 10% per frame (60fps)
+
 ### Tree
-DEPTH = 2
+DEPTH = 3
