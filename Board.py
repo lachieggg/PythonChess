@@ -5,6 +5,7 @@ from pieces.Piece import Piece
 from Constants import *
 from pieces.Pawn import Pawn
 from pieces.King import King
+from pieces.Queen import Queen
 
 class Board:
     def __init__(self, pieces):
@@ -19,13 +20,21 @@ class Board:
         return self.pieces.get(char + str(num))
 
     def score(self, colour):
-        """Calculate the score of a player"""
+        """Calculate the relative score of a player (Material advantage)"""
         score = 0
         for piece in self.pieces.values():
             if(piece.colour == colour):
                 score += piece.value
             else:
                 score -= piece.value
+        return score
+
+    def get_material_score(self, colour):
+        """Calculate the absolute material score for a side"""
+        score = 0
+        for piece in self.pieces.values():
+            if piece.colour == colour:
+                score += piece.value
         return score
 
     def setup_players(self, algorithms=None):
@@ -51,10 +60,33 @@ class Board:
             print("That piece cannot move there.")
             return False
 
+        # 1. Handle Castling execution
+        if isinstance(piece, King):
+            if abs(ord(_from[0]) - ord(_to[0])) == 2:
+                # This is a castle! Move the rook as well.
+                is_kingside = (_to[0] == 'G')
+                old_rook_char = 'H' if is_kingside else 'A'
+                new_rook_char = 'F' if is_kingside else 'D'
+                rook = self.pieces.get(old_rook_char + str(piece.num))
+                if rook:
+                    rook.char = new_rook_char
+                    rook.moved = True
+                    self.pieces[new_rook_char + str(piece.num)] = rook
+                    del self.pieces[old_rook_char + str(piece.num)]
+
         # Move piece
         piece.char = _to[0]
         piece.num = int(_to[1])
         piece.moved = True
+        
+        # 2. Handle Pawn Promotion
+        if isinstance(piece, Pawn):
+            if (piece.colour == WHITE and piece.num == BLACK_ROW) or \
+               (piece.colour == BLACK and piece.num == WHITE_ROW):
+                # Promote to Queen
+                piece = Queen('Q', piece.colour, piece.char, piece.num)
+                print(f"{piece.colour} Pawn promoted to Queen!")
+
         # Set
         self.pieces[_to] = piece
         del self.pieces[_from]

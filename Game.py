@@ -2,6 +2,7 @@ import sys
 import pygame
 import os
 import time
+import copy
 
 from Player import Player
 from pieces.Piece import Piece
@@ -48,7 +49,9 @@ class Game:
         self.anim_piece = None
         self.anim_start_pix = None
         self.anim_end_pix = None
+        self.anim_end_pix = None
         self.anim_progress = 0
+        self.history = []
 
     def handle_mouse_click(self):
         """Determines what to do when the user clicks the mouse"""
@@ -97,6 +100,16 @@ class Game:
                     self.paused = not self.paused
                     return True
 
+                # Check for undo button click
+                if self.window.is_undo_clicked((x, y)):
+                    self.undo_move()
+                    return True
+                
+                # Check for reset button click
+                if self.window.is_reset_clicked((x, y)):
+                    self.reset_game()
+                    return True
+
                 if self.paused:
                     return True
 
@@ -129,7 +142,14 @@ class Game:
                 if not running:
                     break
 
-                if self.ai_mode and running and not self.paused:
+                if not running:
+                    break
+
+                # AI Logic: 
+                # 1. AI vs AI mode: Always trigger AI turn
+                # 2. Human vs AI mode: Trigger AI turn if it's the computer's turn
+                is_computer_turn = (self.turn == self.computer)
+                if (self.ai_mode or is_computer_turn) and running and not self.paused:
                     running = self.ai_turn()
 
                 self.render()
@@ -141,6 +161,9 @@ class Game:
 
     def ai_turn(self):
         """Execute one AI turn. Returns False if the game should end."""
+        # AI Pacing: slight delay to make moves feel more natural
+        pygame.time.wait(500)
+
         player_name = "White" if self.turn.colour == 'W' else "Black"
         print(f"\n{player_name}'s turn: ")
 
@@ -164,6 +187,9 @@ class Game:
         self.anim_start_pix = start_pix
         self.anim_end_pix = end_pix
         self.anim_progress = 0
+
+        # Save state before moving
+        self.save_state()
 
         # Render the move visually (logically update board)
         if not self.board.move_piece(_from, _to):
@@ -197,6 +223,52 @@ class Game:
             self.clock.tick(60)
 
         return True
+
+    def save_state(self):
+        """Save the current state to history for undo"""
+        state = {
+            'pieces': copy.deepcopy(self.board.pieces),
+            'turn': self.turn,
+            'last_move': self.last_move
+        }
+        self.history.append(state)
+
+    def undo_move(self):
+        """Revert to the previous state. In Human vs AI, undoes twice."""
+        if not self.history:
+            print("Nothing to undo.")
+            return
+
+        # If in Human vs AI mode and it's the human's turn, 
+        # undoing once just brings it back to AI's turn (who will move again).
+        # So we undo TWICE to get back to the human's previous turn.
+        undo_count = 2 if (not self.ai_mode and self.turn == self.player and len(self.history) >= 2) else 1
+        
+        for _ in range(undo_count):
+            if not self.history:
+                break
+            state = self.history.pop()
+            self.board.pieces = state['pieces']
+            self.turn = state['turn']
+            self.last_move = state['last_move']
+        
+        # Reset selection and animation
+        self.square_selected = False
+        self.anim_piece = None
+        print("Undo successful.")
+
+    def reset_game(self):
+        """Reset the game to the starting state"""
+        print("Resetting game...")
+        factory = PieceFactory()
+        self.board.pieces = factory.get_pieces()
+        self.history = []
+        self.turn = self.player
+        self.last_move = None
+        self.square_selected = False
+        self.anim_piece = None
+        self.paused = False
+        print("Game reset.")
 
     def render(self):
         """Unified render method that includes highlights and pieces"""
@@ -235,6 +307,13 @@ class Game:
         # Draw buttons
         self.window.draw_quit_button()
         self.window.draw_pause_button(self.paused)
+        self.window.draw_undo_button()
+        self.window.draw_reset_button()
+        
+        # Draw scores
+        white_score = self.board.get_material_score('W')
+        black_score = self.board.get_material_score('B')
+        self.window.draw_scores(white_score, black_score)
             
         pygame.display.flip()
 
@@ -246,54 +325,68 @@ class Game:
         self.turn = self.player
 
     def select_square(self, sq):
-        """Select a square"""
+        """Select a square or move a piece"""
         if not sq:
             return
         
-        if(VERBOSE): print(self.board.score('W'))
+        piece = self.board.pieces.get(sq)
 
-        if self.square_selected:
-            if(VERBOSE): print("Square already selected.")
-            if (self.square_selected == sq):
-                # User selected already selected square
-                if(VERBOSE): print("Deselecting square")
-                if(VERBOSE): print("\n")
+        # 1. No square selected yet: handle selection
+        if not self.square_selected:
+            if not piece or piece.colour != self.turn.colour:
+                if piece:
+                    print(f"Not your turn! It's {self.turn.colour}'s turn.")
+                return
+            
+            if(VERBOSE): print("Selecting square")
+            self.square_selected = sq
+            return
+
+        # 2. Square already selected: handle move or deselection
+        if(VERBOSE): print("Square already selected.")
+        
+        if self.square_selected == sq:
+            # User selected already selected square -> Deselect
+            if(VERBOSE): print("Deselecting square")
+            self.square_selected = False
+            return
+        
+        # Move piece
+        src_sq = self.square_selected
+        piece = self.board.pieces.get(src_sq)
+        if piece:
+            legal_moves = [m[1] for m in piece.get_possible_moves_for_piece(self.board)]
+            if sq in legal_moves:
+                # Trigger animation
+                start_pix = self.window.get_pixels_from_square(src_sq[0], int(src_sq[1]))
+                end_pix = self.window.get_pixels_from_square(sq[0], int(sq[1]))
+                self.anim_piece = piece
+                self.anim_start_pix = start_pix
+                self.anim_end_pix = end_pix
+                self.anim_progress = 0
+
+                # Save state before moving
+                self.save_state()
+
+                # Move the piece in the board
+                moved = self.board.move_piece(src_sq, sq)
+                if moved:
+                    self.turn = self.player if self.turn == self.computer else self.computer
+                    self.last_move = (src_sq, sq)
+                    
+                    if self.board.is_in_check(self.turn.colour):
+                        print(f"{self.turn.colour} is in Check!")
+                
                 self.square_selected = False
                 return
             else:
-                # Move piece
-                piece = self.board.pieces.get(self.square_selected)
-                if piece:
-                    legal_moves = [m[1] for m in piece.get_possible_moves_for_piece(self.board)]
-                    if sq in legal_moves:
-                        # Trigger animation
-                        start_pix = self.window.get_pixels_from_square(self.square_selected[0], int(self.square_selected[1]))
-                        end_pix = self.window.get_pixels_from_square(sq[0], int(sq[1]))
-                        self.anim_piece = piece
-                        self.anim_start_pix = start_pix
-                        self.anim_end_pix = end_pix
-                        self.anim_progress = 0
-
-                        # Move the piece in the board
-                        moved = self.board.move_piece(self.square_selected, sq)
-                        if moved:
-                            self.turn = self.player if self.turn == self.computer else self.computer
-                            self.last_move = (self.square_selected, sq)
-                            
-                            # Check for checkmate/stalemate
-                            if self.board.is_in_check(self.turn.colour):
-                                print(f"{self.turn.colour} is in Check!")
-                        
-                        self.square_selected = False
-                        return
-                    else:
-                        print("Illegal move (Check?)")
-                        self.square_selected = False
-                        return
-
-        if(VERBOSE): print("Selecting square")
-        if(VERBOSE): print("\n")
-        self.square_selected = sq
+                # Illegal move/target: if targeting own piece, switch selection, otherwise deselect
+                if piece.colour == (self.board.pieces.get(sq).colour if self.board.pieces.get(sq) else None):
+                    self.square_selected = sq
+                    if(VERBOSE): print("Switching selection")
+                else:
+                    print("Illegal move (Check?)")
+                    self.square_selected = False
 
 
 if __name__ == "__main__":

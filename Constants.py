@@ -14,7 +14,6 @@ COMPUTER_COLOUR = BLACK
 BOARD_WIDTH = BOARD_HEIGHT = 8
 
 ### Turns
-SANDBOX_MODE = True
 GOD_MODE = False
 
 ### Indexes
@@ -30,6 +29,7 @@ PIECE_WIDTH = 20
 SQUARE_WIDTH = 80
 BORDER_WIDTH = 80
 PIECE_HEIGHT = 60 # target height for scaling pieces
+SOURCE_SQUARE_WIDTH = 252 # square width in the source asset (e.g. 252 for 2050px board)
 
 ### Drawing Offsets
 # Piece offsets are now calculated dynamically in Window.py
